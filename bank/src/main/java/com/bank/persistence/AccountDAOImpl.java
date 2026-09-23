@@ -8,14 +8,15 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.bank.domain.Account;
 import com.bank.domain.Transaction;
 
 public class AccountDAOImpl implements AccountDAO {
-    private static final Logger LOGGER = Logger.getLogger(AccountDAOImpl.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccountDAOImpl.class.getName());
     private static final String OVERDRAW_SQLSTATE = "23514";
     private final ConnectionFactory connectionFactory;
 
@@ -34,7 +35,7 @@ public class AccountDAOImpl implements AccountDAO {
                 return new Account(rs.getInt("account_id"), pin, rs.getBigDecimal("balance"));
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "failed to create amount", e);
+            LOGGER.error("failed to create amount", e);
             throw new IllegalStateException("couldn't create accoutn", e);
         }
     }
@@ -49,7 +50,7 @@ public class AccountDAOImpl implements AccountDAO {
                 return Optional.of(new Account(rs.getInt("account_id"), rs.getString("pin"), rs.getBigDecimal("balance")));
             }
     } catch (SQLException e) {
-        LOGGER.log(Level.SEVERE, "failed to look up account " + accountId, e);
+        LOGGER.error("failed to look up account " + accountId, e);
         throw new IllegalStateException("couldnt look up acccount", e);
         }
     } 
@@ -68,7 +69,7 @@ public class AccountDAOImpl implements AccountDAO {
                 throw e;
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "deposit failed for this account" + accountId, e);
+            LOGGER.error("deposit failed for this account" + accountId, e);
             throw new IllegalStateException("couldnt process deposit", e);
         }
     }
@@ -87,7 +88,7 @@ public class AccountDAOImpl implements AccountDAO {
                 throw e;
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "withdraw failed for this account" + accountId, e);
+            LOGGER.error("withdraw failed for this account" + accountId, e);
             throw new IllegalStateException("couldnt process withrdrawl", e);
         }
     }
@@ -109,17 +110,17 @@ public class AccountDAOImpl implements AccountDAO {
             }
         } catch (SQLException e) {
             if(OVERDRAW_SQLSTATE.equals(e.getSQLState())) {
-                LOGGER.warning("rejected overdraw transfer from account " + fromAccountId);
+                LOGGER.warn("rejected overdraw transfer from account " + fromAccountId);
                 throw new InsufficientFundsException("insufiicent funds for transfer");
             }
-            LOGGER.log(Level.SEVERE, "transfer failed from " + fromAccountId + " to " + toAccountId, e);
+            LOGGER.error("transfer failed from " + fromAccountId + " to " + toAccountId, e);
             throw new IllegalStateException("couldnt process transfer", e);
         }
     }
 
     @Override
     public List<Transaction> findRecentTransactions(int accountId, int limit){
-        String sql = "SELECT transaction_id, account_id, type, amount, related_account_id, timestamp" + "FROM transactions WHERE account_id = ? ORDER BY timestamp DESC LIMIT ?";
+        String sql = "SELECT transaction_id, account_id, type, amount, related_account_id, timestamp " + "FROM transactions WHERE account_id = ? ORDER BY timestamp DESC LIMIT ?";
         List<Transaction> results = new ArrayList<>();
         try(Connection conn = connectionFactory.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, accountId);
@@ -137,7 +138,7 @@ public class AccountDAOImpl implements AccountDAO {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "failed to fetch hiostory for ammount " + accountId, e);
+            LOGGER.error("failed to fetch hiostory for ammount " + accountId, e);
             throw new IllegalStateException("couldnt fetch transaction history", e);
         }
         return results;
@@ -153,7 +154,7 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     private void insertTransaction(Connection conn, int accountId, Transaction.Type type, BigDecimal amount, Integer relatedAccountId) throws SQLException {
-        String sql = "INSERT INTO transaction (account_id, amount, related_account_id) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO transactions (account_id, type, amount, related_account_id) VALUES (?, ?, ?, ?)";
         try(PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, accountId);
             ps.setString(2, type.name());

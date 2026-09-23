@@ -1,65 +1,41 @@
-Sep 22, 2026 10:56:55 AM com.bank.persistence.AccountDAOImpl createAccount
-INFO: CReated account 1
-Sep 22, 2026 10:57:09 AM com.bank.persistence.AccountDAOImpl deposit
-SEVERE: deposit failed for this account1
-org.postgresql.util.PSQLException: ERROR: relation "transaction" does not exist
-  Position: 13
-	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2733)
-	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2420)
-	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
-	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:517)
-	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:434)
-	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:194)
-	at org.postgresql.jdbc.PgPreparedStatement.executeUpdate(PgPreparedStatement.java:155)
-	at com.bank.persistence.AccountDAOImpl.insertTransaction(AccountDAOImpl.java:163)
-	at com.bank.persistence.AccountDAOImpl.deposit(AccountDAOImpl.java:63)
-	at com.bank.service.BankServiceImpl.deposit(BankServiceImpl.java:44)
-	at com.bank.api.BankRepl.deposit(BankRepl.java:91)
-	at com.bank.api.BankRepl.menu(BankRepl.java:70)
+2026-09-23 08:42:17 ERROR com.bank.api.BankRepl - unexpceted error
+java.lang.IllegalStateException: Couldn't connect to the database
+	at com.bank.persistence.ConnectionFactory.getConnection(ConnectionFactory.java:32)
+	at com.bank.persistence.AccountDAOImpl.findById(AccountDAOImpl.java:45)
+	at com.bank.service.BankServiceImpl.getBalance(BankServiceImpl.java:37)
+	at com.bank.api.BankRepl.menu(BankRepl.java:69)
 	at com.bank.api.BankRepl.run(BankRepl.java:38)
 	at com.bank.api.Main.main(Main.java:21)
 	at org.codehaus.mojo.exec.ExecJavaMojo.doMain(ExecJavaMojo.java:385)
 	at org.codehaus.mojo.exec.ExecJavaMojo.doExec(ExecJavaMojo.java:374)
 	at org.codehaus.mojo.exec.ExecJavaMojo.lambda$execute$0(ExecJavaMojo.java:296)
 	at java.base/java.lang.Thread.run(Thread.java:1527)
-
-2026-09-22 10:57:09 ERROR com.bank.api.BankRepl - unexpceted error
-java.lang.IllegalStateException: couldnt process deposit
-	at com.bank.persistence.AccountDAOImpl.deposit(AccountDAOImpl.java:72)
-	at com.bank.service.BankServiceImpl.deposit(BankServiceImpl.java:44)
-	at com.bank.api.BankRepl.deposit(BankRepl.java:91)
-	at com.bank.api.BankRepl.menu(BankRepl.java:70)
-	at com.bank.api.BankRepl.run(BankRepl.java:38)
-	at com.bank.api.Main.main(Main.java:21)
-	at org.codehaus.mojo.exec.ExecJavaMojo.doMain(ExecJavaMojo.java:385)
-	at org.codehaus.mojo.exec.ExecJavaMojo.doExec(ExecJavaMojo.java:374)
-	at org.codehaus.mojo.exec.ExecJavaMojo.lambda$execute$0(ExecJavaMojo.java:296)
-	at java.base/java.lang.Thread.run(Thread.java:1527)
-Caused by: org.postgresql.util.PSQLException: ERROR: relation "transaction" does not exist
-  Position: 13
-	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2733)
-	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2420)
-	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
-	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:517)
-	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:434)
-	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:194)
-	at org.postgresql.jdbc.PgPreparedStatement.executeUpdate(PgPreparedStatement.java:155)
-	at com.bank.persistence.AccountDAOImpl.insertTransaction(AccountDAOImpl.java:163)
-	at com.bank.persistence.AccountDAOImpl.deposit(AccountDAOImpl.java:63)
+Caused by: org.postgresql.util.PSQLException: Connection to localhost:5432 refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:352)
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:54)
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:273)
+	at org.postgresql.Driver.makeConnection(Driver.java:446)
+	at org.postgresql.Driver.connect(Driver.java:298)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:613)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:199)
+	at com.bank.persistence.ConnectionFactory.getConnection(ConnectionFactory.java:27)
 	... 9 common frames omitted
-Sep 22, 2026 10:57:16 AM com.bank.persistence.AccountDAOImpl deposit
-SEVERE: deposit failed for this account1
-org.postgresql.util.PSQLException: ERROR: relation "transaction" does not exist
-  Position: 13
-	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2733)
-	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2420)
-	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
-	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:517)
-	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:434)
-	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:194)
-	at org.postgresql.jdbc.PgPreparedStatement.executeUpdate(PgPreparedStatement.java:155)
-	at com.bank.persistence.AccountDAOImpl.insertTransaction(AccountDAOImpl.java:163)
-	at com.bank.persistence.AccountDAOImpl.deposit(AccountDAOImpl.java:63)
+Caused by: java.net.ConnectException: Connection refused (connect failed)
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:642)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:551)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:595)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:284)
+	at java.base/java.net.Socket.connect(Socket.java:668)
+	at org.postgresql.core.PGStream.createSocket(PGStream.java:260)
+	at org.postgresql.core.PGStream.<init>(PGStream.java:121)
+	at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:140)
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:268)
+	... 16 common frames omitted
+2026-09-23 08:42:23 ERROR com.bank.api.BankRepl - unexpceted error
+java.lang.IllegalStateException: Couldn't connect to the database
+	at com.bank.persistence.ConnectionFactory.getConnection(ConnectionFactory.java:32)
+	at com.bank.persistence.AccountDAOImpl.deposit(AccountDAOImpl.java:59)
 	at com.bank.service.BankServiceImpl.deposit(BankServiceImpl.java:44)
 	at com.bank.api.BankRepl.deposit(BankRepl.java:91)
 	at com.bank.api.BankRepl.menu(BankRepl.java:70)
@@ -69,10 +45,57 @@ org.postgresql.util.PSQLException: ERROR: relation "transaction" does not exist
 	at org.codehaus.mojo.exec.ExecJavaMojo.doExec(ExecJavaMojo.java:374)
 	at org.codehaus.mojo.exec.ExecJavaMojo.lambda$execute$0(ExecJavaMojo.java:296)
 	at java.base/java.lang.Thread.run(Thread.java:1527)
-
-2026-09-22 10:57:16 ERROR com.bank.api.BankRepl - unexpceted error
+Caused by: org.postgresql.util.PSQLException: Connection to localhost:5432 refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:352)
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:54)
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:273)
+	at org.postgresql.Driver.makeConnection(Driver.java:446)
+	at org.postgresql.Driver.connect(Driver.java:298)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:613)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:199)
+	at com.bank.persistence.ConnectionFactory.getConnection(ConnectionFactory.java:27)
+	... 10 common frames omitted
+Caused by: java.net.ConnectException: Connection refused (connect failed)
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:642)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:551)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:595)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:284)
+	at java.base/java.net.Socket.connect(Socket.java:668)
+	at org.postgresql.core.PGStream.createSocket(PGStream.java:260)
+	at org.postgresql.core.PGStream.<init>(PGStream.java:121)
+	at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:140)
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:268)
+	... 17 common frames omitted
+Sep 23, 2026 8:45:24 AM com.bank.service.BankServiceImpl login
+WARNING: failed login attempt for thy account 1234
+Sep 23, 2026 8:45:30 AM com.bank.service.BankServiceImpl login
+WARNING: failed login attempt for thy account 2
+2026-09-23 08:45:36 INFO  com.bank.persistence.AccountDAOImpl - CReated account 4
+2026-09-23 08:45:42 ERROR com.bank.persistence.AccountDAOImpl - deposit failed for this account4
+org.postgresql.util.PSQLException: ERROR: column "related_account_id" of relation "transactions" does not exist
+  Position: 53
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2733)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2420)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:517)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:434)
+	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:194)
+	at org.postgresql.jdbc.PgPreparedStatement.executeUpdate(PgPreparedStatement.java:155)
+	at com.bank.persistence.AccountDAOImpl.insertTransaction(AccountDAOImpl.java:164)
+	at com.bank.persistence.AccountDAOImpl.deposit(AccountDAOImpl.java:64)
+	at com.bank.service.BankServiceImpl.deposit(BankServiceImpl.java:44)
+	at com.bank.api.BankRepl.deposit(BankRepl.java:91)
+	at com.bank.api.BankRepl.menu(BankRepl.java:70)
+	at com.bank.api.BankRepl.run(BankRepl.java:38)
+	at com.bank.api.Main.main(Main.java:21)
+	at org.codehaus.mojo.exec.ExecJavaMojo.doMain(ExecJavaMojo.java:385)
+	at org.codehaus.mojo.exec.ExecJavaMojo.doExec(ExecJavaMojo.java:374)
+	at org.codehaus.mojo.exec.ExecJavaMojo.lambda$execute$0(ExecJavaMojo.java:296)
+	at java.base/java.lang.Thread.run(Thread.java:1527)
+2026-09-23 08:45:42 ERROR com.bank.api.BankRepl - unexpceted error
 java.lang.IllegalStateException: couldnt process deposit
-	at com.bank.persistence.AccountDAOImpl.deposit(AccountDAOImpl.java:72)
+	at com.bank.persistence.AccountDAOImpl.deposit(AccountDAOImpl.java:73)
 	at com.bank.service.BankServiceImpl.deposit(BankServiceImpl.java:44)
 	at com.bank.api.BankRepl.deposit(BankRepl.java:91)
 	at com.bank.api.BankRepl.menu(BankRepl.java:70)
@@ -82,8 +105,8 @@ java.lang.IllegalStateException: couldnt process deposit
 	at org.codehaus.mojo.exec.ExecJavaMojo.doExec(ExecJavaMojo.java:374)
 	at org.codehaus.mojo.exec.ExecJavaMojo.lambda$execute$0(ExecJavaMojo.java:296)
 	at java.base/java.lang.Thread.run(Thread.java:1527)
-Caused by: org.postgresql.util.PSQLException: ERROR: relation "transaction" does not exist
-  Position: 13
+Caused by: org.postgresql.util.PSQLException: ERROR: column "related_account_id" of relation "transactions" does not exist
+  Position: 53
 	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2733)
 	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2420)
 	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
@@ -91,13 +114,12 @@ Caused by: org.postgresql.util.PSQLException: ERROR: relation "transaction" does
 	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:434)
 	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:194)
 	at org.postgresql.jdbc.PgPreparedStatement.executeUpdate(PgPreparedStatement.java:155)
-	at com.bank.persistence.AccountDAOImpl.insertTransaction(AccountDAOImpl.java:163)
-	at com.bank.persistence.AccountDAOImpl.deposit(AccountDAOImpl.java:63)
+	at com.bank.persistence.AccountDAOImpl.insertTransaction(AccountDAOImpl.java:164)
+	at com.bank.persistence.AccountDAOImpl.deposit(AccountDAOImpl.java:64)
 	... 9 common frames omitted
-Sep 22, 2026 10:57:40 AM com.bank.persistence.AccountDAOImpl withdraw
-SEVERE: withdraw failed for this account1
+2026-09-23 08:45:48 ERROR com.bank.persistence.AccountDAOImpl - withdraw failed for this account4
 org.postgresql.util.PSQLException: ERROR: new row for relation "account" violates check constraint "balance_non_negative"
-  Detail: Failing row contains (1, 1025, -1.00).
+  Detail: Failing row contains (4, 1234, -1.00).
 	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2733)
 	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2420)
 	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
@@ -105,8 +127,8 @@ org.postgresql.util.PSQLException: ERROR: new row for relation "account" violate
 	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:434)
 	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:194)
 	at org.postgresql.jdbc.PgPreparedStatement.executeUpdate(PgPreparedStatement.java:155)
-	at com.bank.persistence.AccountDAOImpl.updateBalance(AccountDAOImpl.java:151)
-	at com.bank.persistence.AccountDAOImpl.withdraw(AccountDAOImpl.java:81)
+	at com.bank.persistence.AccountDAOImpl.updateBalance(AccountDAOImpl.java:152)
+	at com.bank.persistence.AccountDAOImpl.withdraw(AccountDAOImpl.java:82)
 	at com.bank.service.BankServiceImpl.withdraw(BankServiceImpl.java:50)
 	at com.bank.api.BankRepl.withdraw(BankRepl.java:98)
 	at com.bank.api.BankRepl.menu(BankRepl.java:71)
@@ -116,10 +138,9 @@ org.postgresql.util.PSQLException: ERROR: new row for relation "account" violate
 	at org.codehaus.mojo.exec.ExecJavaMojo.doExec(ExecJavaMojo.java:374)
 	at org.codehaus.mojo.exec.ExecJavaMojo.lambda$execute$0(ExecJavaMojo.java:296)
 	at java.base/java.lang.Thread.run(Thread.java:1527)
-
-2026-09-22 10:57:40 ERROR com.bank.api.BankRepl - unexpceted error
+2026-09-23 08:45:48 ERROR com.bank.api.BankRepl - unexpceted error
 java.lang.IllegalStateException: couldnt process withrdrawl
-	at com.bank.persistence.AccountDAOImpl.withdraw(AccountDAOImpl.java:91)
+	at com.bank.persistence.AccountDAOImpl.withdraw(AccountDAOImpl.java:92)
 	at com.bank.service.BankServiceImpl.withdraw(BankServiceImpl.java:50)
 	at com.bank.api.BankRepl.withdraw(BankRepl.java:98)
 	at com.bank.api.BankRepl.menu(BankRepl.java:71)
@@ -130,7 +151,7 @@ java.lang.IllegalStateException: couldnt process withrdrawl
 	at org.codehaus.mojo.exec.ExecJavaMojo.lambda$execute$0(ExecJavaMojo.java:296)
 	at java.base/java.lang.Thread.run(Thread.java:1527)
 Caused by: org.postgresql.util.PSQLException: ERROR: new row for relation "account" violates check constraint "balance_non_negative"
-  Detail: Failing row contains (1, 1025, -1.00).
+  Detail: Failing row contains (4, 1234, -1.00).
 	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2733)
 	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2420)
 	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
@@ -138,13 +159,14 @@ Caused by: org.postgresql.util.PSQLException: ERROR: new row for relation "accou
 	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:434)
 	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:194)
 	at org.postgresql.jdbc.PgPreparedStatement.executeUpdate(PgPreparedStatement.java:155)
-	at com.bank.persistence.AccountDAOImpl.updateBalance(AccountDAOImpl.java:151)
-	at com.bank.persistence.AccountDAOImpl.withdraw(AccountDAOImpl.java:81)
+	at com.bank.persistence.AccountDAOImpl.updateBalance(AccountDAOImpl.java:152)
+	at com.bank.persistence.AccountDAOImpl.withdraw(AccountDAOImpl.java:82)
 	... 9 common frames omitted
-Sep 22, 2026 10:58:14 AM com.bank.persistence.AccountDAOImpl findRecentTransactions
-SEVERE: failed to fetch hiostory for ammount 1
-org.postgresql.util.PSQLException: ERROR: column "transaction_id" does not exist
-  Position: 8
+2026-09-23 08:45:55 WARN  com.bank.persistence.AccountDAOImpl - rejected overdraw transfer from account 4
+2026-09-23 08:45:58 ERROR com.bank.persistence.AccountDAOImpl - failed to fetch hiostory for ammount 4
+org.postgresql.util.PSQLException: ERROR: column "related_account_id" does not exist
+  Hint: Perhaps you meant to reference the column "transactions.related_acount_id".
+  Position: 50
 	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2733)
 	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2420)
 	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
@@ -152,7 +174,7 @@ org.postgresql.util.PSQLException: ERROR: column "transaction_id" does not exist
 	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:434)
 	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:194)
 	at org.postgresql.jdbc.PgPreparedStatement.executeQuery(PgPreparedStatement.java:137)
-	at com.bank.persistence.AccountDAOImpl.findRecentTransactions(AccountDAOImpl.java:127)
+	at com.bank.persistence.AccountDAOImpl.findRecentTransactions(AccountDAOImpl.java:128)
 	at com.bank.service.BankServiceImpl.getHistory(BankServiceImpl.java:64)
 	at com.bank.api.BankRepl.history(BankRepl.java:112)
 	at com.bank.api.BankRepl.menu(BankRepl.java:73)
@@ -162,10 +184,9 @@ org.postgresql.util.PSQLException: ERROR: column "transaction_id" does not exist
 	at org.codehaus.mojo.exec.ExecJavaMojo.doExec(ExecJavaMojo.java:374)
 	at org.codehaus.mojo.exec.ExecJavaMojo.lambda$execute$0(ExecJavaMojo.java:296)
 	at java.base/java.lang.Thread.run(Thread.java:1527)
-
-2026-09-22 10:58:14 ERROR com.bank.api.BankRepl - unexpceted error
+2026-09-23 08:45:58 ERROR com.bank.api.BankRepl - unexpceted error
 java.lang.IllegalStateException: couldnt fetch transaction history
-	at com.bank.persistence.AccountDAOImpl.findRecentTransactions(AccountDAOImpl.java:141)
+	at com.bank.persistence.AccountDAOImpl.findRecentTransactions(AccountDAOImpl.java:142)
 	at com.bank.service.BankServiceImpl.getHistory(BankServiceImpl.java:64)
 	at com.bank.api.BankRepl.history(BankRepl.java:112)
 	at com.bank.api.BankRepl.menu(BankRepl.java:73)
@@ -175,8 +196,9 @@ java.lang.IllegalStateException: couldnt fetch transaction history
 	at org.codehaus.mojo.exec.ExecJavaMojo.doExec(ExecJavaMojo.java:374)
 	at org.codehaus.mojo.exec.ExecJavaMojo.lambda$execute$0(ExecJavaMojo.java:296)
 	at java.base/java.lang.Thread.run(Thread.java:1527)
-Caused by: org.postgresql.util.PSQLException: ERROR: column "transaction_id" does not exist
-  Position: 8
+Caused by: org.postgresql.util.PSQLException: ERROR: column "related_account_id" does not exist
+  Hint: Perhaps you meant to reference the column "transactions.related_acount_id".
+  Position: 50
 	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2733)
 	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2420)
 	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
@@ -184,56 +206,10 @@ Caused by: org.postgresql.util.PSQLException: ERROR: column "transaction_id" doe
 	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:434)
 	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:194)
 	at org.postgresql.jdbc.PgPreparedStatement.executeQuery(PgPreparedStatement.java:137)
-	at com.bank.persistence.AccountDAOImpl.findRecentTransactions(AccountDAOImpl.java:127)
+	at com.bank.persistence.AccountDAOImpl.findRecentTransactions(AccountDAOImpl.java:128)
 	... 9 common frames omitted
-Sep 22, 2026 10:58:27 AM com.bank.persistence.AccountDAOImpl createAccount
-INFO: CReated account 2
-Sep 22, 2026 10:58:37 AM com.bank.persistence.AccountDAOImpl transfer
-WARNING: rejected overdraw transfer from account 2
-Sep 22, 2026 10:58:45 AM com.bank.persistence.AccountDAOImpl deposit
-SEVERE: deposit failed for this account2
-org.postgresql.util.PSQLException: ERROR: relation "transaction" does not exist
-  Position: 13
-	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2733)
-	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2420)
-	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
-	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:517)
-	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:434)
-	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:194)
-	at org.postgresql.jdbc.PgPreparedStatement.executeUpdate(PgPreparedStatement.java:155)
-	at com.bank.persistence.AccountDAOImpl.insertTransaction(AccountDAOImpl.java:163)
-	at com.bank.persistence.AccountDAOImpl.deposit(AccountDAOImpl.java:63)
-	at com.bank.service.BankServiceImpl.deposit(BankServiceImpl.java:44)
-	at com.bank.api.BankRepl.deposit(BankRepl.java:91)
-	at com.bank.api.BankRepl.menu(BankRepl.java:70)
-	at com.bank.api.BankRepl.run(BankRepl.java:38)
-	at com.bank.api.Main.main(Main.java:21)
-	at org.codehaus.mojo.exec.ExecJavaMojo.doMain(ExecJavaMojo.java:385)
-	at org.codehaus.mojo.exec.ExecJavaMojo.doExec(ExecJavaMojo.java:374)
-	at org.codehaus.mojo.exec.ExecJavaMojo.lambda$execute$0(ExecJavaMojo.java:296)
-	at java.base/java.lang.Thread.run(Thread.java:1527)
-
-2026-09-22 10:58:45 ERROR com.bank.api.BankRepl - unexpceted error
-java.lang.IllegalStateException: couldnt process deposit
-	at com.bank.persistence.AccountDAOImpl.deposit(AccountDAOImpl.java:72)
-	at com.bank.service.BankServiceImpl.deposit(BankServiceImpl.java:44)
-	at com.bank.api.BankRepl.deposit(BankRepl.java:91)
-	at com.bank.api.BankRepl.menu(BankRepl.java:70)
-	at com.bank.api.BankRepl.run(BankRepl.java:38)
-	at com.bank.api.Main.main(Main.java:21)
-	at org.codehaus.mojo.exec.ExecJavaMojo.doMain(ExecJavaMojo.java:385)
-	at org.codehaus.mojo.exec.ExecJavaMojo.doExec(ExecJavaMojo.java:374)
-	at org.codehaus.mojo.exec.ExecJavaMojo.lambda$execute$0(ExecJavaMojo.java:296)
-	at java.base/java.lang.Thread.run(Thread.java:1527)
-Caused by: org.postgresql.util.PSQLException: ERROR: relation "transaction" does not exist
-  Position: 13
-	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2733)
-	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2420)
-	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
-	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:517)
-	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:434)
-	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:194)
-	at org.postgresql.jdbc.PgPreparedStatement.executeUpdate(PgPreparedStatement.java:155)
-	at com.bank.persistence.AccountDAOImpl.insertTransaction(AccountDAOImpl.java:163)
-	at com.bank.persistence.AccountDAOImpl.deposit(AccountDAOImpl.java:63)
-	... 9 common frames omitted
+Sep 23, 2026 8:50:30 AM com.bank.service.BankServiceImpl login
+INFO: account 4 logged in succesffuly
+2026-09-23 08:50:34 INFO  com.bank.persistence.AccountDAOImpl - Depoisted 10 into account 4
+2026-09-23 08:50:40 INFO  com.bank.persistence.AccountDAOImpl - withdraw 3 from account 4
+2026-09-23 08:50:46 INFO  com.bank.persistence.AccountDAOImpl - transfeered 2 from 4 to 2
