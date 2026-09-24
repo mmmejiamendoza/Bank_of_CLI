@@ -213,3 +213,11 @@ INFO: account 4 logged in succesffuly
 2026-09-23 08:50:34 INFO  com.bank.persistence.AccountDAOImpl - Depoisted 10 into account 4
 2026-09-23 08:50:40 INFO  com.bank.persistence.AccountDAOImpl - withdraw 3 from account 4
 2026-09-23 08:50:46 INFO  com.bank.persistence.AccountDAOImpl - transfeered 2 from 4 to 2
+2026-09-23 15:23:43 INFO  com.bank.persistence.AccountDAOImpl - CReated account 5
+2026-09-23 15:24:44 INFO  com.bank.persistence.AccountDAOImpl - Depoisted 100 into account 5
+2026-09-23 15:24:53 INFO  com.bank.persistence.AccountDAOImpl - Depoisted 30 into account 5
+2026-09-23 15:24:58 INFO  com.bank.persistence.AccountDAOImpl - withdraw 20 from account 5
+2026-09-23 15:25:06 INFO  com.bank.persistence.AccountDAOImpl - transfeered 25 from 5 to 1
+2026-09-23 15:25:28 INFO  com.bank.persistence.AccountDAOImpl - Depoisted 40 into account 5
+2026-09-23 21:56:29 INFO  com.bank.service.BankServiceImpl - account 4 logged in succesffuly
+2026-09-23 21:56:40 INFO  com.bank.persistence.AccountDAOImpl - Depoisted 45 into account 4

@@ -2,14 +2,16 @@ package com.bank.service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.bank.domain.Account;
 import com.bank.domain.Transaction;
 import com.bank.persistence.AccountDAO;
 
 public class BankServiceImpl implements BankService {
-    private static final Logger LOGGER = Logger.getLogger(BankServiceImpl.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(BankServiceImpl.class);
     private final AccountDAO accountDAO;
 
     public BankServiceImpl(AccountDAO accountDAO) {
@@ -25,7 +27,7 @@ public class BankServiceImpl implements BankService {
     public Optional<Account> login(int accountId, String pin) {
         Optional<Account> account = accountDAO.findById(accountId);
         if (account.isEmpty() || !account.get().getPin().equals(pin)) {
-            LOGGER.warning("failed login attempt for thy account " + accountId);
+            LOGGER.warn("failed login attempt for thy account " + accountId);
             return Optional.empty();
         }
         LOGGER.info("account " + accountId + " logged in succesffuly");
@@ -64,7 +66,7 @@ public class BankServiceImpl implements BankService {
         return accountDAO.findRecentTransactions(account_id, limit);
     }
     private void requirePositive(BigDecimal amount) {
-        if(amount == null | amount.signum() <= 0) {
+        if(amount == null || amount.signum() <= 0) {
             throw new IllegalArgumentException("amount must be more than zero");
         }
     }
